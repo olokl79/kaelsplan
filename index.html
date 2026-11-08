@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="nn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kaels plan</title>
+  <meta name="description" content="Kaels plan er ein roman om tre liv og trådar ingen av dei ser. Kjem til sals i 2027.">
+  <meta name="theme-color" content="#0c161d">
+
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="nn_NO">
+  <meta property="og:url" content="https://kaelsplan.no/">
+  <meta property="og:title" content="Kaels plan">
+  <meta property="og:description" content="Ein roman om å bli sett, frå begge sider. Kjem til sals i 2027.">
+  <meta property="og:image" content="https://kaelsplan.no/bilete/deling.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+
+  <style>
+    /* Oppsett: ein tittelside øvst, så ein kollasj der dei tre bileta
+       overlappar kvarandre i sikksakk med teksten på den opne sida,
+       og ein gyllen tråd som går gjennom alle tre. Ei visuell verd:
+       stormnatt og gull, berre mørkt tema. */
+    :root {
+      --hav: #0c161d;      /* bakgrunn, stormhavet */
+      --djup: #132430;     /* hevne flater */
+      --skum: #ece6db;     /* brødtekst, skumkvitt */
+      --dis: #9eadb2;      /* dempa tekst */
+      --trad: #e9b46a;     /* gulltråden */
+      --glod: #ffe2b0;     /* sterkaste lyset */
+
+      --f-display: "Italiana", "Didot", "Bodoni 72", Georgia, serif;
+      --f-tekst: "Newsreader", "Iowan Old Style", Georgia, "Times New Roman", serif;
+
+      --side: min(1200px, 100% - 2 * clamp(16px, 4vw, 48px));
+      --overlapp: clamp(40px, 7vw, 110px);
+      --luft: clamp(72px, 11vw, 150px);
+
+      color-scheme: dark;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      background: var(--hav);
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
+
+    body {
+      margin: 0;
+      background: var(--hav);
+      color: var(--skum);
+      font-family: var(--f-tekst);
+      font-size: clamp(1.06rem, 0.98rem + 0.3vw, 1.2rem);
+      line-height: 1.6;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+
+    a { color: var(--glod); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+    a:hover { color: var(--trad); }
+
+    :focus-visible {
+      outline: 2px solid var(--trad);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    .hopp {
+      position: absolute;
+      left: 16px;
+      top: -60px;
+      z-index: 100;
+      padding: 10px 16px;
+      background: var(--trad);
+      color: var(--hav);
+      text-decoration: none;
+    }
+    .hopp:focus { top: 12px; }
+
+    .ramme { width: var(--side); margin-inline: auto; }
+
+    h1, h2, h3 {
+      font-family: var(--f-display);
+      font-weight: 400;
+      line-height: 1.12;
+      text-wrap: balance;
+      margin: 0;
+    }
+
+    /* ---------- Topplinje ---------- */
+    .topp {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgb(12 22 29 / 0.78);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgb(233 180 106 / 0.14);
+    }
+    .topp .ramme {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 64px;
+    }
+    .merke {
+      font-family: var(--f-display);
+      font-size: 1.5rem;
+      color: var(--skum);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .merke:hover { color: var(--glod); }
+    .meny {
+      display: flex;
+      align-items: center;
+      gap: clamp(16px, 3vw, 32px);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: 1rem;
+    }
+    .meny a { color: var(--skum); text-decoration: none; }
+    .meny a:hover { color: var(--glod); }
+    .meny .meny__knapp {
+      padding: 7px 16px;
+      border: 1px solid rgb(233 180 106 / 0.55);
+      border-radius: 999px;
+      color: var(--glod);
+    }
+    .meny .meny__knapp:hover { background: rgb(233 180 106 / 0.12); }
+
+    /* ---------- Tittelside ---------- */
+    .tittel {
+      position: relative;
+      isolation: isolate;
+      padding-block: clamp(56px, 9vw, 120px) clamp(56px, 8vw, 104px);
+      overflow: hidden;
+    }
+    .tittel::before {
+      /* lyset bak skyene, frå biletet av Kael og Aera */
+      content: "";
+      position: absolute;
+      inset: -20% -10% auto auto;
+      width: 70vw;
+      height: 70vw;
+      max-width: 900px;
+      max-height: 900px;
+      background: radial-gradient(closest-side, rgb(255 210 140 / 0.16), transparent 70%);
+      z-index: -2;
+      pointer-events: none;
+    }
+    .tittel canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .tittel h1 {
+      font-size: clamp(4.2rem, 15vw, 11.5rem);
+      line-height: 0.92;
+      letter-spacing: -0.01em;
+      text-shadow: 0 0 40px rgb(233 180 106 / 0.25);
+    }
+    .kreditt {
+      margin: clamp(18px, 2.4vw, 28px) 0 0;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--dis);
+    }
+    .kreditt, .tittel__lede, .lansering {
+      text-shadow: 0 0 10px var(--hav), 0 0 18px var(--hav), 0 0 2px var(--hav);
+    }
+    .kreditt span { display: block; }
+    .tittel__lede {
+      margin: clamp(28px, 4vw, 44px) 0 0;
+      max-width: 30ch;
+      font-style: italic;
+      font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
+      line-height: 1.3;
+    }
+    .tittel__handling {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px 28px;
+      margin-top: clamp(28px, 4vw, 40px);
+    }
+    .lansering {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--glod);
+    }
+    .knapp {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 10px 24px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--trad);
+      color: var(--hav);
+      font: 500 1.02rem/1.2 var(--f-tekst);
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 0 28px rgb(233 180 106 / 0.3);
+      transition: background-color .2s ease, box-shadow .2s ease;
+    }
+    .knapp:hover { background: var(--glod); color: var(--hav); box-shadow: 0 0 36px rgb(255 226 176 / 0.45); }
+
+    /* ---------- Kollasjen ---------- */
+    .kollasj {
+      position: relative;
+      padding-bottom: var(--luft);
+    }
+    .kollasj__trad {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+      pointer-events: none;
+      overflow: visible;
+      mix-blend-mode: screen;
+    }
+    .strand {
+      display: grid;
+      grid-template-columns: 64fr 36fr;
+      column-gap: clamp(28px, 4vw, 64px);
+      align-items: start;
+    }
+    .strand--b { grid-template-columns: 36fr 64fr; }
+    .strand--c { grid-template-columns: 62fr 38fr; }
+
+    .strand__bilete {
+      position: relative;
+      margin: 0;
+      grid-row: 1;
+      grid-column: 1;
+      border-radius: 3px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgb(233 180 106 / 0.22),
+        0 30px 70px -20px rgb(0 0 0 / 0.75),
+        0 0 60px -10px rgb(233 180 106 / 0.18);
+    }
+    .strand__bilete img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+    .strand__tekst {
+      grid-row: 1;
+      grid-column: 2;
+      padding-top: 0;
+      /* held det nedste feltet tomt, så neste bilete kan leggje seg inn over */
+      padding-bottom: calc(var(--overlapp) + 32px);
+    }
+    .strand--b .strand__bilete { grid-column: 2; z-index: 2; }
+    .strand--b .strand__tekst  { grid-column: 1; align-self: end; }
+    .strand--c .strand__bilete { z-index: 3; margin-left: clamp(0px, 4vw, 56px); }
+
+    .strand + .strand .strand__bilete { margin-top: calc(var(--overlapp) * -1); }
+
+    .namn {
+      margin: 0 0 12px;
+      font-style: italic;
+      color: var(--trad);
+      font-size: 1.05rem;
+    }
+    .strand h2 {
+      font-size: clamp(1.8rem, 1.3rem + 1.6vw, 2.6rem);
+      margin-bottom: 16px;
+      max-width: 16ch;
+    }
+    .strand p:not(.namn) {
+      margin: 0;
+      max-width: 40ch;
+      color: var(--skum);
+    }
+
+    .bru {
+      margin: var(--luft) 0 0;
+      text-align: center;
+      font-family: var(--f-display);
+      font-size: clamp(2rem, 1.2rem + 3.6vw, 4.4rem);
+      line-height: 1.1;
+      color: var(--glod);
+      text-shadow: 0 0 30px rgb(233 180 106 / 0.35);
+      text-wrap: balance;
+    }
+
+    /* ---------- Nyheitsbrev ---------- */
+    .brev {
+      position: relative;
+      background:
+        radial-gradient(60% 120% at 85% 0%, rgb(233 180 106 / 0.14), transparent 60%),
+        var(--djup);
+      border-block: 1px solid rgb(233 180 106 / 0.18);
+      padding-block: clamp(64px, 9vw, 120px);
+    }
+    .brev .ramme {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(32px, 6vw, 96px);
+      align-items: end;
+    }
+    .brev h2 { font-size: clamp(2.4rem, 1.6rem + 3vw, 4rem); margin-bottom: 18px; }
+    .brev p { margin: 0; max-width: 44ch; }
+    .skjema { display: grid; gap: 10px; }
+    .skjema label { font-size: 1rem; color: var(--dis); }
+    .skjema__rad { display: flex; gap: 12px; flex-wrap: wrap; }
+    .skjema input {
+      flex: 1 1 240px;
+      min-height: 52px;
+      padding: 12px 18px;
+      border: 1px solid rgb(233 180 106 / 0.4);
+      border-radius: 999px;
+      background: rgb(12 22 29 / 0.7);
+      color: var(--skum);
+      font: 400 1.05rem/1.2 var(--f-tekst);
+    }
+    .skjema input::placeholder { color: rgb(158 173 178 / 0.7); }
+    .skjema input:focus-visible { outline-offset: 2px; border-color: var(--trad); }
+    .skjema .knapp { min-height: 52px; flex: 0 0 auto; }
+    .skjema__merknad { margin: 4px 0 0; font-size: 0.95rem; color: var(--dis); }
+    .skjema__status { min-height: 1.6em; margin: 4px 0 0; font-size: 1rem; color: var(--glod); }
+    .skjema__status[data-type="feil"] { color: #f2a493; }
+
+    /* ---------- Om ---------- */
+    .om { padding-block: var(--luft); }
+    .om__boka {
+      display: grid;
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      gap: clamp(24px, 5vw, 80px);
+      padding-bottom: clamp(56px, 8vw, 104px);
+      border-bottom: 1px solid rgb(233 180 106 / 0.18);
+    }
+    .om h2 { font-size: clamp(2.4rem, 1.6rem + 3vw, 4rem); }
+    .om__boka p {
+      margin: 0;
+      max-width: 38ch;
+      font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.7rem);
+      line-height: 1.45;
+    }
+    .om__par {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(40px, 6vw, 96px);
+      padding-top: clamp(56px, 8vw, 104px);
+    }
+    .om h3 { font-size: clamp(1.8rem, 1.3rem + 1.4vw, 2.5rem); margin-bottom: 18px; }
+    .om__par p { margin: 0 0 1em; max-width: 46ch; }
+    .om__par p:last-child { margin-bottom: 0; }
+
+    .portrett {
+      width: 150px;
+      aspect-ratio: 1;
+      margin: 0 0 28px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 35% 30%, #23394a, var(--djup) 70%);
+      box-shadow: 0 0 0 1px rgb(233 180 106 / 0.5), 0 0 40px -6px rgb(233 180 106 / 0.35);
+      font-family: var(--f-display);
+      font-size: 2.6rem;
+      color: var(--glod);
+    }
+    .portrett img { width: 100%; height: 100%; object-fit: cover; }
+
+    .tittelblad {
+      margin: 36px 0 0;
+      padding: 24px 0 0;
+      border-top: 1px solid rgb(233 180 106 / 0.25);
+      font-family: var(--f-display);
+      font-size: 1.35rem;
+      line-height: 1.5;
+      color: var(--glod);
+    }
+    .tittelblad span { display: block; }
+
+    /* ---------- Botn ---------- */
+    .botn {
+      border-top: 1px solid rgb(233 180 106 / 0.14);
+      padding-block: 36px 44px;
+      font-size: 0.95rem;
+      color: var(--dis);
+    }
+    .botn .ramme {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px 32px;
+    }
+    .botn p { margin: 0; }
+
+    /* ---------- Smalare skjermar ---------- */
+    @media (max-width: 820px) {
+      .strand, .strand--b, .strand--c { grid-template-columns: minmax(0, 1fr); }
+      .strand__bilete, .strand--b .strand__bilete, .strand--c .strand__bilete {
+        grid-column: 1; grid-row: 1; margin-left: 0;
+      }
+      .strand__tekst, .strand--b .strand__tekst {
+        grid-column: 1; grid-row: 2;
+        padding-top: 24px;
+        padding-bottom: 72px;
+      }
+      .strand + .strand .strand__bilete { margin-top: 0; }
+      .strand--b .strand__bilete { margin-left: 8%; }
+      .strand--c .strand__bilete { margin-right: 8%; }
+      .strand h2 { max-width: 20ch; }
+      .bru { margin-top: 24px; }
+      .brev .ramme, .om__boka, .om__par { grid-template-columns: minmax(0, 1fr); }
+      .kollasj__trad { display: none; }
+    }
+    @media (max-width: 420px) {
+      .meny { gap: 14px; }
+      .meny .meny__knapp { padding: 6px 12px; }
+      .merke { font-size: 1.3rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .knapp { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <a class="hopp" href="#innhald">Hopp til innhaldet</a>
+
+  <header class="topp">
+    <div class="ramme">
+      <a class="merke" href="#top">Kaels plan</a>
+      <nav aria-label="Hovudmeny">
+        <ul class="meny">
+          <li><a href="#om">Om</a></li>
+          <li><a class="meny__knapp" href="#nyheitsbrev">Nyheitsbrev</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="innhald">
+    <section class="tittel" id="top" aria-labelledby="boktittel">
+      <canvas id="tradar" aria-hidden="true"></canvas>
+      <div class="ramme">
+        <h1 id="boktittel">Kaels plan</h1>
+        <p class="kreditt">
+          <span>Regissert av Øyvind Løkling</span>
+          <span>I all hovudsak skriven av ChatGPT (OpenAI)</span>
+        </p>
+        <p class="tittel__lede">Ein roman om å bli sett, frå begge sider.</p>
+        <div class="tittel__handling">
+          <p class="lansering">Kjem til sals i 2027</p>
+          <a class="knapp" href="#nyheitsbrev">Følg utviklinga</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="kollasj ramme" id="forteljingane" aria-label="Tre glimt frå boka">
+      <svg class="kollasj__trad" id="kollasjtrad" aria-hidden="true">
+        <defs>
+          <linearGradient id="gull" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#e9b46a" stop-opacity="0"/>
+            <stop offset="0.15" stop-color="#e9b46a" stop-opacity="0.9"/>
+            <stop offset="0.55" stop-color="#ffe2b0" stop-opacity="1"/>
+            <stop offset="0.9" stop-color="#e9b46a" stop-opacity="0.8"/>
+            <stop offset="1" stop-color="#e9b46a" stop-opacity="0"/>
+          </linearGradient>
+          <filter id="glod" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="4"/>
+          </filter>
+        </defs>
+        <path class="trad-glod" fill="none" stroke="url(#gull)" stroke-width="5" opacity="0.5" filter="url(#glod)"/>
+        <path class="trad-line" fill="none" stroke="url(#gull)" stroke-width="1.4" stroke-linecap="round"/>
+        <path class="trad-line2" fill="none" stroke="url(#gull)" stroke-width="0.8" opacity="0.6" stroke-linecap="round"/>
+      </svg>
+
+      <article class="strand strand--a" aria-labelledby="t-kael">
+        <figure class="strand__bilete">
+          <img src="bilete/kael-og-aera.jpg"
+               srcset="bilete/kael-og-aera-900.jpg 900w, bilete/kael-og-aera.jpg 1600w"
+               sizes="(min-width: 821px) 62vw, 100vw"
+               width="1600" height="900"
+               alt="Kael og Aera, kledde i lysande slør, ser utover eit stormande hav der ein mann strekkjer handa opp av bølgjene.">
+        </figure>
+        <div class="strand__tekst">
+          <p class="namn">Kael og Aera</p>
+          <h2 id="t-kael">Nokon ser deg, også når havet tek deg.</h2>
+          <p>Frå ein stad bortanfor stormen ser Kael og Aera ein mann kjempe mot bølgjene. Dei kjenner Sigmund betre enn han nokon gong har kjent seg sjølv. Det dei veit om han, har han berre så vidt kunna ane.</p>
+        </div>
+      </article>
+
+      <article class="strand strand--b" aria-labelledby="t-tunet">
+        <figure class="strand__bilete">
+          <img src="bilete/tunet.jpg"
+               srcset="bilete/tunet-900.jpg 900w, bilete/tunet.jpg 1600w"
+               sizes="(min-width: 821px) 64vw, 100vw"
+               width="1600" height="900" loading="lazy"
+               alt="Olav og Mari står på kvar si side av tunet ved fjorden. Mellom dei held to ungar kvarandre i handa, og gylne trådar går gjennom biletet.">
+        </figure>
+        <div class="strand__tekst">
+          <p class="namn">Olav og Mari</p>
+          <h2 id="t-tunet">Det som held ein familie saman, ser ein sjeldan.</h2>
+          <p>Olav og Mari står på kvar si side av tunet og ser same veg. Mellom dei står ungane, hand i hand. Ein gard ved fjorden og eit heilt vanleg liv, med band som held og band som blir sette på prøve.</p>
+        </div>
+      </article>
+
+      <article class="strand strand--c" aria-labelledby="t-synnove">
+        <figure class="strand__bilete">
+          <img src="bilete/allmotet.jpg"
+               srcset="bilete/allmotet-900.jpg 900w, bilete/allmotet.jpg 1600w"
+               sizes="(min-width: 821px) 58vw, 100vw"
+               width="1600" height="900" loading="lazy"
+               alt="Synnøve sit på eit allmøte med handa mot munnen. Framme viser ein skjerm ein graf som peikar nedover.">
+        </figure>
+        <div class="strand__tekst">
+          <p class="namn">Synnøve</p>
+          <h2 id="t-synnove">Kva blir att av oss når maskinene kan gjere jobben?</h2>
+          <p>Grafen på skjermen peikar nedover. Orda frå podiet er mjuke: omstilling, effektivisering, ny teknologi. Synnøve veit kva dei betyr lenge før nokon seier det høgt.</p>
+        </div>
+      </article>
+
+      <p class="bru">Tre liv. Usynlege trådar. Éin plan.</p>
+    </section>
+
+    <section class="brev" id="nyheitsbrev" aria-labelledby="t-brev">
+      <div class="ramme">
+        <div>
+          <h2 id="t-brev">Følg utviklinga</h2>
+          <p>Kaels plan blir til akkurat no. Meld deg på nyheitsbrevet, så får du glimt frå arbeidet undervegs og beskjed den dagen boka kjem ut.</p>
+        </div>
+        <form class="skjema" id="brevskjema" novalidate>
+          <label for="epost">E-postadressa di</label>
+          <div class="skjema__rad">
+            <input id="epost" name="email" type="email" autocomplete="email" placeholder="namn@epost.no" required>
+            <button class="knapp" type="submit">Meld meg på</button>
+          </div>
+          <p class="skjema__merknad">Du kan melde deg av når som helst.</p>
+          <p class="skjema__status" id="brevstatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
+    <section class="om ramme" id="om" aria-label="Om boka, bokregissøren og AI-samarbeidet">
+      <div class="om__boka">
+        <h2>Om boka</h2>
+        <p>Kaels plan er ein roman i tre delar om menneske som ikkje veit kor tett dei heng saman. Sigmund kjempar mot havet. Olav og Mari prøver å halde saman eit liv på garden. Synnøve kjenner grunnen gli unna på jobben. Og frå ein annan stad ser Kael og Aera det dei sjølve ikkje ser. Boka kjem først på norsk, som papirbok og e-bok, i 2027.</p>
+      </div>
+
+      <div class="om__par">
+        <article aria-labelledby="t-meg">
+          <figure class="portrett">
+            <img src="bilete/portrett.jpg" alt="Øyvind Løkling, smilande med fjorden og fjella bak seg." width="480" height="480" loading="lazy">
+          </figure>
+          <h3 id="t-meg">Om meg</h3>
+          <p>Eg heiter Øyvind Løkling, og eg er bokregissøren bak Kaels plan. Før dette laga eg testromanen Randsone, som vart trykt i 30 eksemplar til venner og familie.</p>
+          <p>No tek eg steget vidare, og eg vil gjerne ha deg med på vegen. Randsone har si eiga side på <a href="https://randsone.no">randsone.no</a>.</p>
+        </article>
+
+        <article aria-labelledby="t-ai">
+          <h3 id="t-ai">Bokregissør og AI-samarbeid</h3>
+          <p>Kaels plan er i all hovudsak skriven av ChatGPT frå OpenAI. Eg har hatt visjonen, styrt retninga og teke dei endelege avgjerdene om kva som skal stå att. ChatGPT har òg gjort svært mange val undervegs, ikkje minst i skissene til scenene. Det har vore eit salig samarbeid.</p>
+          <p>Rolla mi liknar mest på ein regissør, eller ein byggherre som står ansvarleg for heile bygget. Difor kallar eg meg bokregissør.</p>
+          <p>Claude frå Anthropic har vore med som ytre lesar og samtalepartnar, og har hjelpt meg med denne nettsida. Bileta er laga med ChatGPT. Eg er open om alt dette fordi kunstig intelligens er eit sentralt tema i boka.</p>
+          <p class="tittelblad">
+            <span>Regissert av Øyvind Løkling</span>
+            <span>I all hovudsak skriven av ChatGPT (OpenAI)</span>
+          </p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="botn">
+    <div class="ramme">
+      <p>© 2026 Øyvind Løkling</p>
+      <p>Bilete laga med ChatGPT. Nettsida er laga saman med Claude.</p>
+    </div>
+  </footer>
+
+  <script>
+    /* ---------- Nyheitsbrev ----------
+       Lim inn adressa frå nyheitsbrevtenesta (t.d. MailerLite eller Buttondown)
+       i NYHEITSBREV_ADRESSE, og namnet på e-postfeltet deira i FELTNAMN.
+       Så lenge adressa er tom, blir ingen påmelding sendt. */
+    const NYHEITSBREV_ADRESSE = "";
+    const FELTNAMN = "email";
+
+    (function () {
+      const skjema = document.getElementById("brevskjema");
+      const felt = document.getElementById("epost");
+      const status = document.getElementById("brevstatus");
+      if (!skjema) return;
+
+      skjema.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const verdi = felt.value.trim();
+        const gyldig = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(verdi);
+        if (!gyldig) {
+          status.dataset.type = "feil";
+          status.textContent = "Skriv inn ei gyldig e-postadresse, til dømes namn@epost.no.";
+          felt.focus();
+          return;
+        }
+        if (!NYHEITSBREV_ADRESSE) {
+          status.dataset.type = "info";
+          status.textContent = "Påmeldinga er ikkje opna enno. Kom gjerne attende om litt.";
+          return;
+        }
+        felt.name = FELTNAMN;
+        skjema.action = NYHEITSBREV_ADRESSE;
+        skjema.method = "post";
+        skjema.submit();
+      });
+    })();
+
+    /* ---------- Gulltrådane i tittelen ---------- */
+    (function () {
+      const lerret = document.getElementById("tradar");
+      if (!lerret || !lerret.getContext) return;
+      const ctx = lerret.getContext("2d");
+      const roleg = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let b = 0, h = 0, synleg = true, rafId = 0;
+
+      const tradar = [
+        { y: 0.30, amp: 34, frek: 0.0042, fase: 0.0, fart: 0.00020, breidd: 0.9, alfa: 0.45 },
+        { y: 0.46, amp: 52, frek: 0.0031, fase: 1.7, fart: 0.00016, breidd: 1.6, alfa: 0.95 },
+        { y: 0.55, amp: 40, frek: 0.0037, fase: 3.1, fart: 0.00024, breidd: 1.1, alfa: 0.6 },
+        { y: 0.68, amp: 60, frek: 0.0024, fase: 4.4, fart: 0.00013, breidd: 0.8, alfa: 0.4 },
+        { y: 0.82, amp: 30, frek: 0.0050, fase: 5.6, fart: 0.00019, breidd: 0.7, alfa: 0.35 }
+      ];
+
+      function storleik() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        b = lerret.clientWidth; h = lerret.clientHeight;
+        lerret.width = Math.round(b * dpr); lerret.height = Math.round(h * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function yPaa(t, x, tid) {
+        return h * t.y
+          + Math.sin(x * t.frek + t.fase + tid * t.fart) * t.amp
+          + Math.sin(x * t.frek * 2.3 + t.fase * 0.5 + tid * t.fart * 1.6) * t.amp * 0.3;
+      }
+
+      function teikn(tid) {
+        ctx.clearRect(0, 0, b, h);
+        ctx.globalCompositeOperation = "lighter";
+        for (const t of tradar) {
+          const g = ctx.createLinearGradient(0, 0, b, 0);
+          const a = t.alfa * (b < 700 ? 0.6 : 1);
+          g.addColorStop(0, "rgba(233,180,106,0)");
+          g.addColorStop(0.3, "rgba(233,180,106," + a * 0.45 + ")");
+          g.addColorStop(0.68, "rgba(255,226,176," + a + ")");
+          g.addColorStop(1, "rgba(233,180,106,0)");
+          ctx.strokeStyle = g;
+          ctx.lineWidth = t.breidd;
+          ctx.shadowColor = "rgba(240,180,100,0.9)";
+          ctx.shadowBlur = 12;
+          ctx.beginPath();
+          for (let x = -12; x <= b + 12; x += 6) {
+            const y = yPaa(t, x, tid);
+            if (x === -12) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        }
+        // små lyspunkt som glir langs trådane
+        ctx.shadowBlur = 0;
+        for (let i = 0; i < 7; i++) {
+          const t = tradar[i % tradar.length];
+          const x = ((tid * 0.02 * (0.6 + i * 0.13) + i * 233) % (b + 200)) - 100;
+          const y = yPaa(t, x, tid);
+          const r = 10 + (i % 3) * 4;
+          const p = ctx.createRadialGradient(x, y, 0, x, y, r);
+          p.addColorStop(0, "rgba(255,240,210,0.9)");
+          p.addColorStop(0.25, "rgba(255,210,140,0.35)");
+          p.addColorStop(1, "rgba(255,210,140,0)");
+          ctx.fillStyle = p;
+          ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.globalCompositeOperation = "source-over";
+      }
+
+      function loop(tid) {
+        if (synleg) teikn(tid);
+        rafId = requestAnimationFrame(loop);
+      }
+
+      storleik();
+      teikn(4000);
+      window.addEventListener("resize", function () { storleik(); teikn(performance.now() + 4000); });
+
+      if (!roleg) {
+        if ("IntersectionObserver" in window) {
+          new IntersectionObserver(function (e) { synleg = e[0].isIntersecting; }).observe(lerret);
+        }
+        rafId = requestAnimationFrame(loop);
+      }
+    })();
+
+    /* ---------- Tråden gjennom kollasjen ---------- */
+    (function () {
+      const svg = document.getElementById("kollasjtrad");
+      const kollasj = document.getElementById("forteljingane");
+      if (!svg || !kollasj) return;
+      const bilete = kollasj.querySelectorAll(".strand__bilete");
+
+      function kurve(pkt, spenning) {
+        // Catmull-Rom til kubiske Bézier-kurver
+        let d = "M" + pkt[0][0] + "," + pkt[0][1];
+        for (let i = 0; i < pkt.length - 1; i++) {
+          const p0 = pkt[i - 1] || pkt[i], p1 = pkt[i], p2 = pkt[i + 1], p3 = pkt[i + 2] || p2;
+          const c1 = [p1[0] + (p2[0] - p0[0]) / 6 * spenning, p1[1] + (p2[1] - p0[1]) / 6 * spenning];
+          const c2 = [p2[0] - (p3[0] - p1[0]) / 6 * spenning, p2[1] - (p3[1] - p1[1]) / 6 * spenning];
+          d += " C" + c1.join(",") + " " + c2.join(",") + " " + p2.join(",");
+        }
+        return d;
+      }
+
+      function teikn() {
+        if (bilete.length < 3 || getComputedStyle(svg).display === "none") return;
+        const k = kollasj.getBoundingClientRect();
+        const r = Array.from(bilete, function (el) {
+          const x = el.getBoundingClientRect();
+          return { l: x.left - k.left, t: x.top - k.top, w: x.width, h: x.height };
+        });
+        const [a, bb, c] = r;
+        const pkt = [
+          [-40, a.t + a.h * 0.18],
+          [a.l + a.w * 0.55, a.t + a.h * 0.62],
+          [bb.l + bb.w * 0.12, bb.t + bb.h * 0.30],
+          [bb.l + bb.w * 0.70, bb.t + bb.h * 0.78],
+          [c.l + c.w * 0.55, c.t + c.h * 0.45],
+          [c.l + c.w * 0.30, c.t + c.h + 50],
+          [-40, c.t + c.h + 20]
+        ];
+        const pkt2 = pkt.map(function (p, i) { return [p[0], p[1] + (i % 2 ? -22 : 18)]; });
+        svg.setAttribute("viewBox", "0 0 " + k.width + " " + k.height);
+        svg.querySelector(".trad-glod").setAttribute("d", kurve(pkt, 1));
+        svg.querySelector(".trad-line").setAttribute("d", kurve(pkt, 1));
+        svg.querySelector(".trad-line2").setAttribute("d", kurve(pkt2, 0.8));
+      }
+
+      teikn();
+      window.addEventListener("load", teikn);
+      window.addEventListener("resize", teikn);
+      if ("ResizeObserver" in window) new ResizeObserver(teikn).observe(kollasj);
+    })();
+  </script>
+</body>
+</html>
